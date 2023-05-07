@@ -1,4 +1,5 @@
-let container = document.querySelector(".container");
+let container = document.querySelector(".container")
+let allSquares = null;
 
 /* Cleaning the grid */
 const cleanGrid = () => {
@@ -28,16 +29,44 @@ const buildGrid = (side) => {
     }
 
     let squares = document.querySelectorAll(".square");
-    draw(squares);
+    allSquares = squares;
+
+    let drawingMode = document.querySelector("#drawinMode");
+    if(drawingMode.value == 'click'){
+        drawByClicking(squares);
+    } else {
+        drawBYHovering(squares);
+    }
+    
 }
 
-/* changing the background colour as if we were drawing */
-const draw = (squares) => {
+/* Function to change the mode of drawing and the colour */
+const drawBYHovering = (squares) => {
     squares.forEach((square) => {
-        square.addEventListener("mouseover", (e) => {
-            let colour = document.querySelector("#colour");
-            square.style.backgroundColor = colour.value;
-            e.stopPropagation;
+        square.addEventListener('mouseover', (e) => {
+            if(selectDrawingMode.value == "click"){
+                e.preventDefault();
+            } else {
+                let colour = document.querySelector("#colour");
+                square.style.backgroundColor = colour.value;
+            }
+            
+            e.stopPropagation();
+        });
+    })
+}
+
+const drawByClicking = (squares) => {
+    squares.forEach((square) => {
+        square.addEventListener('click', (e) => {
+            if(selectDrawingMode.value == "mouseover"){
+                e.preventDefault();
+            } else {
+                let colour = document.querySelector("#colour");
+                square.style.backgroundColor = colour.value;
+            }
+            
+            e.stopPropagation();
         });
     })
 }
@@ -53,5 +82,15 @@ newGridButtop.addEventListener("click", () => {
 
     buildGrid(side);
 })
+
+let selectDrawingMode = document.querySelector("#drawinMode");
+selectDrawingMode.addEventListener("change", () => {
+    
+    if(selectDrawingMode.value == 'click'){
+        drawByClicking(allSquares);
+    } else {
+        drawBYHovering(allSquares);
+    }
+});
 
 buildGrid(16);
