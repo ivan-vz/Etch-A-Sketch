@@ -31,11 +31,12 @@ const buildGrid = (side) => {
     draw(squares);
 }
 
-/* changing the background color as if we were drawing */
+/* changing the background colour as if we were drawing */
 const draw = (squares) => {
     squares.forEach((square) => {
         square.addEventListener("mouseover", (e) => {
-            square.style.backgroundColor = "#1f2124";
+            let colour = document.querySelector("#colour");
+            square.style.backgroundColor = colour.value;
             e.stopPropagation;
         });
     })
