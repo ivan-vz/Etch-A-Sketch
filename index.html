@@ -7,23 +7,28 @@
     <link rel="stylesheet" href="./CSS/index.css">
     <title>Etch-A-Sketch</title>
 </head>
-<body>
-    <header>
-        <div class="drawing">
-            <label for="cars">Choose a drawing mode:</label>
-
-            <select name="modes" id="drawinMode">
-                <option value="click">Click</option>
-                <option value="mouseover" selected>Hover</option>
-            </select>
-        </div>
-        <input type="color" id="colour" name="colour">
-        <button id="new">New Grid</button>
-    </header>
-    
+<body>    
     <div class="container">
+        <div id="menuBar">
+            <div id="effects">
+                <div id="optionsOne">
+                    <button id="eraser" class="menu"><i class="fa-solid fa-eraser"></i></button>
+                    <button id="illuminate" class="menu"><i class="fa-solid fa-sun"></i></button>
+                    <button id="obscure" class="menu"><i class="fa-solid fa-sun"></i></button>
+                    <button id="grid" class="menu"><i class="fa-solid fa-border-all"></i></button>
+                </div>
+                <div id="optionsTwo">
+                    <input type="color" name="colorPicker" id="colorPicker">
+                    <button id="whichColor"><i class="fa-solid fa-eye-dropper"></i></button>
+                </div>
+            </div>
+            <button id="newGrid"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div id="paper">
 
+        </div>
     </div>
 </body>
 <script src="./JS/index.js"></script>
+<script src="https://kit.fontawesome.com/8458cec8a6.js" crossorigin="anonymous"></script>
 </html>

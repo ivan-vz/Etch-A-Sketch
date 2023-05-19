@@ -1,6 +1,7 @@
 *{
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 html, body{
@@ -9,31 +10,63 @@ html, body{
 
 body{
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url("../IMG/wood.jpg");
-}
-
-header{
-    width: 880px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-header .drawing{
-    color: white;
+    background-color: #2b2823;
 }
 
 .container{
-    background-color: white;
-    width: 880px;
-    height: 880px;
+    background-color: #8fa691;
+    border-radius: 10px;
+    width: 820px;
+    height: 920px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#menuBar{
+    width: 100%;
+    height: auto;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    display: flex;
     justify-content: space-between;
-    border: 2px solid #1f2124;
+    align-items: center;
+}
+
+#effects{
+    background-color: #f9fadc;
+    width: 400px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+}
+
+#optionsOne{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#optionsTwo{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+#paper {
+    background-color: white;
+    width: 800px;
+    height: 800px;
 }
 
 .row{
@@ -42,17 +75,28 @@ header .drawing{
 }
 
 .square{
-    width: calc(880px / 16);
-    height: calc(880px / 16);
-    padding-right: 2px;
+    width: calc(800px / 16);
+    height: calc(800px / 16);
 }
 
 button{
-    background-color: #77dd77;
+    background-color: #f9fadc;
+    cursor: pointer;
     font-size: 16px;
     font-weight: 900;
     border-color: transparent;
     border-radius: 16px;
-    padding: 10px 60px;
-    margin-bottom: 10px;
+}
+
+.menu{
+    padding: 8px 24px;
+}
+
+#colorPicker{
+    width: 82%;
+}
+
+#newGrid{
+    padding: 24px 32px;
+    font-size: 30px;
 }
