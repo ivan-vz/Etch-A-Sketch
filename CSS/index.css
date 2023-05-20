@@ -12,11 +12,11 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #2b2823;
+    background-color: #e9e0d1;
 }
 
 .container{
-    background-color: #8fa691;
+    background-color: #33605a;
     border-radius: 10px;
     width: 820px;
     height: 920px;
@@ -38,7 +38,7 @@ body{
 }
 
 #effects{
-    background-color: #f9fadc;
+    background-color: #91a398;
     width: 400px;
     padding: 8px;
     display: flex;
@@ -80,12 +80,19 @@ body{
 }
 
 button{
-    background-color: #f9fadc;
+    background-color: #91a398;
+    color:#33605a;
     cursor: pointer;
     font-size: 16px;
     font-weight: 900;
     border-color: transparent;
     border-radius: 16px;
+    transition: all 0.5s ease;
+}
+
+button:hover{
+    background-color: #070001;
+    color: #e9e0d1;
 }
 
 .menu{
@@ -99,4 +106,9 @@ button{
 #newGrid{
     padding: 24px 32px;
     font-size: 30px;
+}
+
+.pressed{
+    background-color: #070001;
+    color: #e9e0d1;
 }
