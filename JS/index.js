@@ -14,7 +14,7 @@ const cleanGrid = () => {
     }
 }
 
-/* Building the grid */
+//Function to build the grid
 const buildGrid = (side) => {
     let squareSize = 800 / side;
     if(paper.hasChildNodes()){
@@ -43,141 +43,153 @@ let mouseClicked = false;
 document.body.onmousedown = () => (mouseClicked = true)
 document.body.onmouseup = () => (mouseClicked = false)
 
-//Function to add 10 in the rgb parts
-let lighter = (rgbColor) => {
-    console.log("entre a lighter");
-    let rgbValues = rgbColor.match(/\d+/g);
-    rgbValues = rgbValues.map((num) => {
-      let newVal = parseInt(num) + 10;
-      if (newVal > 255) {
-        newVal = 255;
-      }
-      return newVal;
-    });
-    return `rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`;
-  };
-
-//Function to subtract 10 in the rgb parts
-let darker = (rgbColor) => {
-    console.log("entre a darker");
-  let rgbValues = rgbColor.match(/\d+/g);
-  rgbValues = rgbValues.map((num) => {
-    let newVal = parseInt(num) - 10;
-    if (newVal < 0) {
-      newVal = 0;
-    }
-    return newVal;
-  });
-  //console.log(`rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`)
-  return `rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`;
-};
-
 //Function to paint the squares
 let draw = (square) => {
     if(square.type == "mouseover" && !mouseClicked) { return }
     if (obscurePressed){ 
-        paintColor = darker(square.target.style.backgroundColor); }
-    if(illuminatePressed){ 
-        paintColor = lighter(square.target.style.backgroundColor); 
-    }
-
-    square.target.style.backgroundColor = paintColor;
-
-    if(!gridPressed){
-        square.target.style.borderColor = paintColor;
-    }
-}
-
-//Auxiliary function of menuEffects that unpulse all the pressed button before press the clicked one
-let changePressed = () => {
-    let alreadyPressed = document.querySelectorAll(".pressed");
-        alreadyPressed.forEach((pressed) => {
-            if(pressed.id != "grid"){
-                pressed.classList.toggle("pressed");
-            }
-        })
-}
-
-//Function to make the effect of a pressed button
-let menuEffects = document.querySelectorAll(".effect");
-menuEffects.forEach((effect) => {
-    effect.addEventListener("click", () => {
-
-        if(effect.id != "grid" && !effect.classList.contains("pressed")){
-            changePressed();
+        square.target.style.backgroundColor = darker(square.target.style.backgroundColor);
+        if(!gridPressed){
+            square.target.style.borderColor =  darker(square.target.style.backgroundColor);
         }
+    } else if(illuminatePressed){ 
+        square.target.style.backgroundColor = lighter(square.target.style.backgroundColor);
+        if(!gridPressed){
+            square.target.style.borderColor = lighter(square.target.style.backgroundColor);
+        } 
+    } else {
+        square.target.style.backgroundColor = paintColor;
+        if(!gridPressed){
+            square.target.style.borderColor = paintColor;
+        }
+    }
+}
+
+let effectMode = ["eraser", "illuminate", "obscure", "grid"];
+let globalMode = ['newGrid', "clean", "colorPicker"];
+//Function to cancel all the effects
+let allActions = document.querySelectorAll(".button");
+allActions.forEach((action) => {
+    action.addEventListener("click", () => {
+        if(globalMode.includes(action.id)){
+            disableAll();
+            if(action.id === "newGrid"){
+                if(gridPressed) { grid(); }
+                newGrid();
+            }
+            if(action.id === "clean"){
+                clean();
+            }
         
-        effect.classList.toggle("pressed");
+        } else {
+            if(action.id === "grid"){
+                grid();
+                disableJustActions(action.id);
+            }
+            if(action.id === "eraser"){
+                if(eraserPressed){
+                    eraserPressed = false;
+                    paintColor = colorPicker.value;
+                } else {
+                    disableJustActions(action.id);
+                    eraserPressed = true;
+                    paintColor = "rgb(255, 255, 255)";
+                }
+            }
+            if(action.id === "illuminate"){
+                if(illuminatePressed){
+                    illuminatePressed = false;
+                } else {
+                    disableJustActions(action.id);
+                    illuminatePressed = true;
+                }
+            }
+            if(action.id === "obscure"){
+                if(obscurePressed){
+                    obscurePressed = false;
+                } else {
+                    disableJustActions(action.id);
+                    obscurePressed = true;
+                }
+            }
+
+            action.classList.toggle("pressed");
+        }
     })
 })
 
-//Function to clean a square
-let eraser = document.querySelector("#eraser");
-eraser.addEventListener("click", () => {
-    if(illuminatePressed) { illuminate.click(); }
-    if(obscurePressed) { obscure.click(); }
+//Auxiliary function that unpulse all the pressed button before press the clicked one (only visually)
+let changePressed = () => {
+    let alreadyPressed = document.querySelectorAll(".pressed");
+    alreadyPressed.forEach((pressed) => {
+        if(pressed.id != "grid"){
+            pressed.classList.toggle("pressed");
+        }
+    })
+}
 
-    if(eraserPressed) {
-        eraserPressed = false;
-        paintColor = colorPicker.value;
-    } else {
-        eraserPressed = true;
-        paintColor = "rgb(255, 255, 255)";
-    }
-});
+//Function to disable all the buttons
+let disableAll = () => {
+    let alreadyPressed = document.querySelectorAll(".pressed");
+    alreadyPressed.forEach((pressed) => {
+
+        switch (pressed.id) {
+            case "eraser": {
+                eraserPressed = false;
+                break;
+            }
+            case "illuminate": {
+                illuminatePressed = false;
+                break;
+            }
+            case "obscure": {
+                obscurePressed = false;
+                break;
+            }
+        }
+
+        pressed.classList.toggle("pressed");
+    })
+}
+
+//Function to disable the effects buttons except for the one that was just pressed
+let disableJustActions = (id) => {
+    let alreadyPressed = document.querySelectorAll(".pressed");
+    alreadyPressed.forEach((pressed) => {
+        if(pressed.id != "grid"){
+            pressed.classList.toggle("pressed");
+        }
+      
+        if ((pressed.id == "eraser") && (id != "eraser")) {
+            eraserPressed = false;
+        }
+
+        if ((pressed.id == "illuminate") && (id != "illuminate")) {
+            illuminatePressed = false;
+        }
+
+        if ((pressed.id == "obscure") && (id != "obscure")) {
+            obscurePressed = false;
+        }
+    })
+}
 
 //Function to select a colour with the input color
 let colorPicker = document.querySelector("#colorPicker");
-colorPicker.addEventListener("change", () => { 
-    if(eraserPressed) { eraser.click(); }
-    if(illuminatePressed) { illuminate.click(); }
-    if(obscurePressed) { obscure.click(); }
+colorPicker.addEventListener("change", () => {
     paintColor = colorPicker.value;
 });
 
 //Function to restart the drawing
-let clean = document.querySelector("#clean");
-clean.addEventListener("click", () => {
-    if(eraserPressed) { eraser.click(); }
-    if(illuminatePressed) { illuminate.click(); }
-    if(obscurePressed) { obscure.click(); }
-
+let clean = () => {
     let allSquares = document.querySelectorAll(".square");
     allSquares.forEach((square) => {
         square.style.backgroundColor = "rgb(255, 255, 255)";
         square.style.borderColor = "rgb(255, 255, 255)";
     })
-})
-
-//Function to illuminate a color
-let illuminate = document.querySelector("#illuminate");
-illuminate.addEventListener("click", () => {
-    if(eraserPressed) { eraser.click(); }
-    if(obscurePressed) { obscure.click(); }
-
-    if(illuminatePressed){
-        illuminatePressed = false;
-    } else {
-        illuminatePressed = true;
-    }
-})
-
-//Function to obscure a color
-let obscure = document.querySelector("#obscure");
-obscure.addEventListener("click", () => {
-    if(eraserPressed) { eraser.click(); }
-    if(illuminatePressed) { illuminate.click(); }
-
-    if(obscurePressed){
-        obscurePressed = false;
-    } else {
-        obscurePressed = true;
-    }
-})
+}
 
 //Function to show the grid
-let grid = document.querySelector("#grid");
-grid.addEventListener('click', () => {
+let grid = () => {
     let allSquares = document.querySelectorAll(".square");
 
     allSquares.forEach((square) => {
@@ -194,24 +206,18 @@ grid.addEventListener('click', () => {
     } else {
         gridPressed = true;
     }
-});
+}
 
 //Function to create a new grid with a selected size
-let newGrid = document.querySelector("#newGrid");
-newGrid.addEventListener("click", () => {
-    
+let newGrid =  () => {
     let size = prompt("Enter the size of the new paper: ");
     if(size === null || size === "") { return };
     while(size <= 0 || size > 100) {
         size = prompt("Wrong kind of number, try again: ");
     }
 
-    if(eraserPressed) { eraser.click(); }
-    if(illuminatePressed) { illuminate.click(); }
-    if(obscurePressed) { obscure.click(); }
-    if(gridPressed) { grid.click(); }
     buildGrid(size);
-})
+}
 
 //Function to traslate a rgb number to an hex number
 let rgbToHex = (red, green, blue) => {
@@ -230,6 +236,32 @@ window.onwheel = () => {
     colorPicker.value = rgbToHex(red, green, blue);
     paintColor =  `rgb(${red}, ${green}, ${blue})`;
 }
+
+//Function to add 10 in the rgb parts
+let lighter = (rgbColor) => {
+    let rgbValues = rgbColor.match(/\d+/g);
+    rgbValues = rgbValues.map((num) => {
+      let newVal = parseInt(num) + 10;
+      if (newVal > 255) {
+        newVal = 255;
+      }
+      return newVal;
+    });
+    return `rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`;
+  };
+
+//Function to subtract 10 in the rgb parts
+let darker = (rgbColor) => {
+  let rgbValues = rgbColor.match(/\d+/g);
+  rgbValues = rgbValues.map((num) => {
+    let newVal = parseInt(num) - 10;
+    if (newVal < 0) {
+      newVal = 0;
+    }
+    return newVal;
+  });
+  return `rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`;
+};
 
 window.onload = () => {
     buildGrid(16);
